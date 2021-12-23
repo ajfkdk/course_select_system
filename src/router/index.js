@@ -4,52 +4,76 @@ import Home from "../views/Home.vue";
 const routes = [
     {
         path: '/',
-        redirect: '/dashboard'
+        redirect: '/tabs'
     }, {
         path: "/",
         name: "Home",
         component: Home,
         children: [
             {
+                path: "/tabs",
+                name: "tabs",
+                meta: {
+                    title: '消息通知',
+                    requireAuth: true,
+                    roles: ['student','admin','teacher']
+                },
+                component: () => import ( /* webpackChunkName: "tabs" */ "../views/Tabs.vue")
+            },
+            {
                 path: "/dashboard",
                 name: "dashboard",
                 meta: {
-                    title: '系统首页'
+                    title: '系统首页',
+                    requireAuth: true,
+                    roles: ['student','admin','teacher']
                 },
                 component: () => import ( /* webpackChunkName: "dashboard" */ "../views/Dashboard.vue")
             }, {
                 path: "/table",
                 name: "basetable",
                 meta: {
-                    title: '表格'
+                    title: '表格',
+                    requireAuth: true,
+                    roles: ['student','admin','teacher']
                 },
                 component: () => import ( /* webpackChunkName: "table" */ "../views/BaseTable.vue")
             }, {
                 path: "/charts",
                 name: "basecharts",
                 meta: {
-                    title: '图表'
+                    title: '图表',
+                    requireAuth: true,
+                    roles: ['student','admin','teacher']
                 },
                 component: () => import ( /* webpackChunkName: "charts" */ "../views/BaseCharts.vue")
             }, {
                 path: "/form",
                 name: "baseform",
                 meta: {
-                    title: '表单'
+                    title: '表单',
+                    requireAuth: true,
+                    roles: ['student','admin','teacher']
                 },
                 component: () => import ( /* webpackChunkName: "form" */ "../views/BaseForm.vue")
-            }, {
-                path: "/tabs",
-                name: "tabs",
+            },
+            {
+                path: "/user",
+                name: "一个不知道什么东西的name",
                 meta: {
-                    title: 'tab标签'
+                    title: '我的信息',
+                    requireAuth: true,
+                    roles: ['student','admin','teacher']
                 },
-                component: () => import ( /* webpackChunkName: "tabs" */ "../views/Tabs.vue")
-            }, {
+                component: () => import ( /* webpackChunkName: "form" */ "../views/User.vue")
+            },
+            {
                 path: "/donate",
                 name: "donate",
                 meta: {
-                    title: '鼓励作者'
+                    title: '鼓励作者',
+                    requireAuth: true,
+                    roles: ['student','admin','teacher']
                 },
                 component: () => import ( /* webpackChunkName: "donate" */ "../views/Donate.vue")
             }, {
@@ -57,56 +81,71 @@ const routes = [
                 name: "permission",
                 meta: {
                     title: '权限管理',
-                    permission: true
+                    requireAuth: true,
+                    roles: ['student','admin','teacher']
                 },
                 component: () => import ( /* webpackChunkName: "permission" */ "../views/Permission.vue")
             }, {
                 path: "/i18n",
                 name: "i18n",
                 meta: {
-                    title: '国际化语言'
+                    title: '国际化语言',
+                    requireAuth: true,
+                    roles: ['student','admin','teacher']
                 },
                 component: () => import ( /* webpackChunkName: "i18n" */ "../views/I18n.vue")
             }, {
                 path: "/upload",
                 name: "upload",
                 meta: {
-                    title: '上传插件'
+                    title: '上传插件',
+                    requireAuth: true,
+                    roles: ['student','admin','teacher']
                 },
                 component: () => import ( /* webpackChunkName: "upload" */ "../views/Upload.vue")
             }, {
                 path: "/icon",
                 name: "icon",
                 meta: {
-                    title: '自定义图标'
+                    title: '自定义图标',
+                    requireAuth: true,
+                    roles: ['student','admin','teacher']
                 },
                 component: () => import ( /* webpackChunkName: "icon" */ "../views/Icon.vue")
             }, {
                 path: '/404',
                 name: '404',
                 meta: {
-                    title: '找不到页面'
+                    title: '找不到页面',
+                    requireAuth: true,
+                    roles: ['student','admin','teacher']
                 },
                 component: () => import (/* webpackChunkName: "404" */ '../views/404.vue')
             }, {
                 path: '/403',
                 name: '403',
                 meta: {
-                    title: '没有权限'
+                    title: '没有权限',
+                    requireAuth: true,
+                    roles: ['student','admin','teacher']
                 },
                 component: () => import (/* webpackChunkName: "403" */ '../views/403.vue')
             }, {
                 path: '/user',
                 name: 'user',
                 meta: {
-                    title: '个人中心'
+                    title: '个人中心',
+                    requireAuth: true,
+                    roles: ['student','admin','teacher']
                 },
                 component: () => import (/* webpackChunkName: "user" */ '../views/User.vue')
             }, {
                 path: '/editor',
                 name: 'editor',
                 meta: {
-                    title: '富文本编辑器'
+                    title: '富文本编辑器',
+                    requireAuth: true,
+                    roles: ['student','admin','teacher']
                 },
                 component: () => import (/* webpackChunkName: "editor" */ '../views/Editor.vue')
             }
@@ -115,7 +154,8 @@ const routes = [
         path: "/login",
         name: "Login",
         meta: {
-            title: '登录'
+            title: '登录',
+            requireAuth: false,
         },
         component: () => import ( /* webpackChunkName: "login" */ "../views/Login.vue")
     }
@@ -126,19 +166,91 @@ const router = createRouter({
     routes
 });
 
+
+/*权限管理：学生权限，老师权限，管理员权限*/
 router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title} | vue-manage-system`;
-    const role = localStorage.getItem('ms_username');
+    document.title = `${to.meta.title} | SSM架构课设`;
+    console.log(routes);
+    const role = localStorage.getItem('my_role');
+    /*是否已经登录，且跳转来自登录界面*/
     if (!role && to.path !== '/login') {
         next('/login');
-    } else if (to.meta.permission) {
-        // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
-        role === 'admin'
-            ? next()
-            : next('/403');
+    } else if (to.meta.requireAuth) {
+        // 如果页面需要权限控制，进入下面这个代码段
+
+        if (to.meta.roles.length !== 0) {
+            for (let i = 0; i < to.meta.roles.length; i++) {
+                if (role === to.meta.roles[i]) {
+                    next()
+                    break
+                } else if (i === to.meta.roles.length - 1) {
+                    next("/403")
+                }
+            }
+        }
+
+
     } else {
         next();
     }
 });
 
 export default router;
+
+/*
+
+router.beforeEach((to, from, next) => {
+    console.log('上一个页面：', from)
+    console.log('下一个页面：', to)
+    let userToken = localStorage.getItem('userToken')
+    let role = localStorage.getItem('role')
+    if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
+        console.log('main-token：', userToken)
+        if (userToken) { // 判断本地是否存在token
+            if (to.meta.roles.length !== 0) {
+                for (let i = 0; i < to.meta.roles.length; i++) {
+                    if (role === to.meta.roles[i]) {
+                        next()
+                        break
+                    } else if (i === to.meta.roles.length - 1) {
+                        next({
+                            path: '/Error'
+                        })
+                    }
+                }
+            } else {
+                next()
+            }
+        } else {
+            next({
+                path: '/Login'
+            })
+        }
+    } else {
+        next()
+    }
+    /!* 如果本地存在token,则不允许直接跳转到登录页面 *!/
+    if (to.fullPath === '/Login') {
+        if (userToken) {
+            next({
+                path: from.fullPath
+            })
+        } else {
+            next()
+        }
+    }
+})
+*/
+/* role === 'admin'
+            ? next()
+            : next('/403');
+        if (role ==="admin"){
+
+        }else if (role === "teacher") {
+
+        }else if (role === "student") {
+
+        }
+        else{
+            console.log(role, "角色有误");
+        }*/

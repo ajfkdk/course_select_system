@@ -32,15 +32,15 @@ import { ref, reactive } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
+import { toLogin } from "../api/index";
 
 export default {
     setup() {
         const router = useRouter();
         const param = reactive({
-            username: "admin",
-            password: "123123",
+          username: "zhangsan",
+            password: "123456",
         });
-
         const rules = {
             username: [
                 {
@@ -57,16 +57,25 @@ export default {
         const submitForm = () => {
             login.value.validate((valid) => {
                 if (valid) {
-                    ElMessage.success("登录成功");
-                    localStorage.setItem("ms_username", param.username);
-                    router.push("/");
+                    //请求服务器接口的操作
+                  //todo 把表单数据发送给后端进行验证如果验证成功跳转到  /
+                  toLogin(param).then((res)=>{
+                    console.log(res);
+                    if (res.code == 200&&res.msg=="登录成功") {
+                      ElMessage.success("登录成功");
+                      localStorage.setItem("ms_username", param.username);
+                      localStorage.setItem("my_role", "teacher");
+                      router.push("/");
+                    }
+
+                    })
+
                 } else {
                     ElMessage.error("登录成功");
                     return false;
                 }
             });
         };
-
         const store = useStore();
         store.commit("clearTags");
 

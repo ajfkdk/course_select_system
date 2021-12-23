@@ -7,3 +7,18 @@ export const fetchData = query => {
         params: query
     });
 };
+
+export const toLogin = query =>{
+    return request({
+        url: './student',
+        method: 'get',
+        params: query
+    });
+}
+
+export const fetchUserData = query =>{
+    return request({
+        url: './student/'+query,
+        method: 'get'
+    });
+}
