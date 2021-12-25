@@ -9,15 +9,15 @@
     </div>
     <div class="container">
       <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
-        <el-table-column prop="name" label="用户名"></el-table-column>
-        <el-table-column prop="name" label="专业"></el-table-column>
+        <el-table-column prop="account" label="用户名"></el-table-column>
+        <el-table-column prop="major" label="专业"></el-table-column>
         <el-table-column label="头像(查看大图)" align="center">
           <template #default="scope">
-            <el-image class="table-td-thumb" :src="scope.row.thumb" :preview-src-list="[scope.row.thumb]">
+            <el-image class="table-td-thumb" :src="scope.row.portraitUrl" :preview-src-list="[scope.row.portraitUrl]">
             </el-image>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="个性签名"></el-table-column>
+        <el-table-column prop="mydesc" label="个性签名"></el-table-column>
         <el-table-column label="操作" width="180" align="center">
           <template #default="scope">
             <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑
@@ -27,10 +27,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="pagination">
-        <el-pagination background layout="total, prev, pager, next" :current-page="query.pageIndex"
-                       :page-size="query.pageSize" :total="pageTotal" @current-change="handlePageChange"></el-pagination>
-      </div>
     </div>
 
     <!-- 编辑弹出框 -->
@@ -56,7 +52,7 @@
 <script>
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { fetchData } from "../api/index";
+import { fetchData,getAllUserInfo } from "../api/index";
 
 export default {
   name: "basetable",
@@ -68,14 +64,20 @@ export default {
       pageSize: 10,
     });
     const tableData = ref([
-
+      {
+        account: "student--jjj",
+        major: "北大法律系",
+        portraitUrl: "http://wx1.sinaimg.cn/large/0073Cjx6gy1gvikq9h345j60go0dlt9z02.jpg",
+        mydesc: "kdsjflkajsdklfj"
+      }
     ]);
     const pageTotal = ref(0);
     // 获取表格数据
     const getData = () => {
-      fetchData(query).then((res) => {
-        tableData.value = res.list;
-        pageTotal.value = res.pageTotal || 50;
+      console.log("hello")
+      getAllUserInfo().then((res) => {
+        tableData.value = res.data;
+        console.log(tableData)
       });
     };
     getData();
