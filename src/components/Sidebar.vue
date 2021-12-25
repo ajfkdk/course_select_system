@@ -45,158 +45,127 @@ export default {
         index: "/tabs",
         title: "消息通知",
       },
-      {
-        icon: "el-icon-lx-home",
-        index: "/dashboard",
-        title: "系统首页",
-      },
+
       {
         icon: "el-icon-lx-cascades",
         index: "/table",
         title: "基础表格",
       },
+
       {
         icon: "el-icon-lx-profile",
         index: "/user",
-        title: "我的信息",
+        title: "我的信息(student)",
       },
 
       {
-        icon: "el-icon-lx-calendar",
-        index: "3",
-        title: "表单相关",
-        subs: [
-          {
-            index: "/form",
-            title: "基本表单",
-          },
-          {
-            index: "/upload",
-            title: "文件上传",
-          },
-          {
-            index: "4",
-            title: "三级菜单",
-            subs: [
-              {
-                index: "/editor",
-                title: "富文本编辑器",
-              },
-            ],
-          },
-        ],
+        icon: "el-icon-lx-profile",
+        index: "/teacherInfo",
+        title: "我的信息(teacher)",
       },
       {
-        icon: "el-icon-lx-emoji",
-        index: "/icon",
-        title: "自定义图标",
+        icon: "el-icon-lx-profile",
+        index: "/adminUser",
+        title: "管理用户",
       },
       {
-        icon: "el-icon-pie-chart",
-        index: "/charts",
-        title: "schart图表",
+        icon: "el-icon-lx-profile",
+        index: "/adminNotice",
+        title: "管理通知",
       },
       {
-        icon: "el-icon-lx-global",
-        index: "/i18n",
-        title: "国际化功能",
+        icon: "el-icon-lx-profile",
+        index: "/adminSystem",
+        title: "选导师系统管理",
       },
-      {
-        icon: "el-icon-lx-warn",
-        index: "7",
-        title: "错误处理",
-        subs: [
-          {
-            index: "/permission",
-            title: "权限测试",
-          },
-          {
-            index: "/404",
-            title: "404页面",
-          },
-        ],
-      },
-      {
-        icon: "el-icon-lx-redpacket_fill",
-        index: "/donate",
-        title: "支持作者",
-      },
+
+
     ];
-
 
 
     const route = useRoute();
 
     const role_path = {
-      teacher:[
+      teacher: [
+        {
+          icon: "el-icon-lx-copy",
+          index: "/tabs",
+          title: "消息通知",
+        },
+
+        {
+          icon: "el-icon-lx-cascades",
+          index: "/table",
+          title: "基础表格",
+        },
+
+
+
+        {
+          icon: "el-icon-lx-profile",
+          index: "/teacherInfo",
+          title: "我的信息(teacher)",
+        },
+      ],
+      student: [
+        {
+          icon: "el-icon-lx-copy",
+          index: "/tabs",
+          title: "消息通知",
+        },
+
+        {
+          icon: "el-icon-lx-cascades",
+          index: "/table",
+          title: "基础表格",
+        },
+
+        {
+          icon: "el-icon-lx-profile",
+          index: "/user",
+          title: "我的信息(student)",
+        },
+
+
+
+      ],
+      admin: [
         {
           icon: "el-icon-lx-copy",
           index: "/tabs",
           title: "消息通知",
         },
         {
-          icon: "el-icon-lx-home",
-          index: "/dashboard",
-          title: "系统首页",
+          icon: "el-icon-lx-addressbook",
+          index: "/adminUser",
+          title: "管理用户",
         },
         {
-          icon: "el-icon-lx-cascades",
-          index: "/table",
-          title: "基础表格",
+          icon: "el-icon-lx-remind",
+          index: "/adminN",
+          title: "管理通知",
         },
         {
-          icon: "el-icon-lx-profile",
-          index: "/user",
-          title: "我的信息",
-        }
-      ],
-      student:[{
-        icon: "el-icon-pie-chart",
-        index: "/charts",
-        title: "schart图表",
-      },
-        {
-          icon: "el-icon-lx-global",
-          index: "/i18n",
-          title: "国际化功能",
-        }],
-      admin:[
-        {
-          icon: "el-icon-lx-calendar",
-          index: "3",
-          title: "表单相关",
-          subs: [
-            {
-              index: "/form",
-              title: "基本表单",
-            },
-            {
-              index: "/upload",
-              title: "文件上传",
-            },
-            {
-              index: "4",
-              title: "三级菜单",
-              subs: [
-                {
-                  index: "/editor",
-                  title: "富文本编辑器",
-                },
-              ],
-            },
-          ],
-        }
+          icon: "el-icon-lx-settings",
+          index: "/adminSystem",
+          title: "选导师系统管理",
+        },
+
+
+
+
       ]
     }
 
     const renderData = () => {
       const role = localStorage.getItem('my_role');
       const newItem = role_path[role];
-      console.log("renderData：",newItem)
-      items=newItem;
-    }
+      items = newItem;
+    };
 
+    // 需要权限分配的时候开启
     renderData();
+
     const onRoutes = computed(() => {
       return route.path;
     });

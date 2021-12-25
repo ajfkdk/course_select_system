@@ -30,10 +30,9 @@
           </template>
           <el-form label-width="90px" center>
             <el-form-item label="用户名："> {{ name }}</el-form-item>
-            <el-form-item label="学号：">{{ form.studentNum }}</el-form-item>
-            <el-form-item label="班级：">{{ form.classId }}</el-form-item>
+            <el-form-item label="教师编号：">{{ form.teacherNumber }}</el-form-item>
             <el-form-item label="专业：">{{ form.major }}</el-form-item>
-            <el-form-item label="个人简介：">{{ form.desc }}</el-form-item>
+            <el-form-item label="个人简介：">{{form.desc}}</el-form-item>
             <el-form-item>
               <el-button type="primary" @click="showDialog2">修改信息</el-button>
             </el-form-item>
@@ -46,11 +45,8 @@
 
       <el-form label-width="90px" center>
         <el-form-item label="用户名："> {{ name }}</el-form-item>
-        <el-form-item label="学号：">
-          <el-input v-model="form.studentNum"></el-input>
-        </el-form-item>
-        <el-form-item label="班级：">
-          <el-input v-model="form.classId"></el-input>
+        <el-form-item label="教师编号：">
+          <el-input v-model="form.teacherNumber"></el-input>
         </el-form-item>
         <el-form-item label="专业：">
           <el-input v-model="form.major"></el-input>
@@ -69,6 +65,9 @@
       </span>
       </template>
     </el-dialog>
+
+
+
 
 
     <el-dialog title="裁剪图片" v-model="dialogVisible" width="600px">
@@ -93,7 +92,6 @@ import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 import avatar from "../assets/img/img.jpg";
 import {fetchUserData} from "../api/index";
-
 export default {
   name: "user",
   components: {
@@ -101,28 +99,22 @@ export default {
   },
   setup() {
     const name = localStorage.getItem("ms_username");
-    const role = localStorage.getItem("my_role");
+    const role=localStorage.getItem("my_role");
     const fetchData = (name) => {
-      console.log("student");
-      if (role != "student") return;
-      fetchUserData(name, "student").then((res) => {
-        form.classId = res.data.classId;
-        form.major = res.data.major;
-        form.studentNum = res.data.studentNumber;
-        form.teacherId = res.data.teacherId;
-        avatarImg.value = res.data.portraitUrl;
-        console.log("uer",res)
+      if (role!="teacher") return;
+      fetchUserData(name,role).then((res)=>{
+        console.log(res.code == 200, res.msg == "请求成功");
 
+          form.teacherNumber=res.data.teacherNumber;
+          form.major=res.data.major;
+          form.desc=res.data.mydesc;
       })
     }
 
     const form = reactive({
-      studentNum: "15615645646",
-      classId: "1" + "班",
+      teacherNumber: "00000000000000000000000",
       major: "软件工程",
       desc: "不可能！我的代码怎么可能会有bug！",
-      /*导师的编号*/
-      teacherId: ""
     });
     const onSubmit = () => {
     };
@@ -180,7 +172,6 @@ export default {
 
       cropImage,
       saveAvatar,
-      fetchData,
     };
   },
 };

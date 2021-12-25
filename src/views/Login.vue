@@ -61,17 +61,19 @@ export default {
                   //todo 把表单数据发送给后端进行验证如果验证成功跳转到  /
                   toLogin(param).then((res)=>{
                     console.log(res);
-                    if (res.code == 200&&res.msg=="登录成功") {
+                    if (res.code == 200&&res.msg!="") {
                       ElMessage.success("登录成功");
                       localStorage.setItem("ms_username", param.username);
-                      localStorage.setItem("my_role", "teacher");
+                      localStorage.setItem("my_role", res.msg);
                       router.push("/");
+                    }else{
+                      ElMessage.error("登录失败");
                     }
 
                     })
 
                 } else {
-                    ElMessage.error("登录成功");
+                    ElMessage.error("登录失败");
                     return false;
                 }
             });

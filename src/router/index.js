@@ -16,44 +16,25 @@ const routes = [
                 meta: {
                     title: '消息通知',
                     requireAuth: true,
-                    roles: ['student','admin','teacher']
+                    roles: ['student', 'admin', 'teacher']
                 },
                 component: () => import ( /* webpackChunkName: "tabs" */ "../views/Tabs.vue")
-            },
-            {
-                path: "/dashboard",
-                name: "dashboard",
-                meta: {
-                    title: '系统首页',
-                    requireAuth: true,
-                    roles: ['student','admin','teacher']
-                },
-                component: () => import ( /* webpackChunkName: "dashboard" */ "../views/Dashboard.vue")
             }, {
                 path: "/table",
                 name: "basetable",
                 meta: {
                     title: '表格',
                     requireAuth: true,
-                    roles: ['student','admin','teacher']
+                    roles: ['student', 'admin', 'teacher']
                 },
                 component: () => import ( /* webpackChunkName: "table" */ "../views/BaseTable.vue")
-            }, {
-                path: "/charts",
-                name: "basecharts",
-                meta: {
-                    title: '图表',
-                    requireAuth: true,
-                    roles: ['student','admin','teacher']
-                },
-                component: () => import ( /* webpackChunkName: "charts" */ "../views/BaseCharts.vue")
             }, {
                 path: "/form",
                 name: "baseform",
                 meta: {
                     title: '表单',
                     requireAuth: true,
-                    roles: ['student','admin','teacher']
+                    roles: ['student', 'admin', 'teacher']
                 },
                 component: () => import ( /* webpackChunkName: "form" */ "../views/BaseForm.vue")
             },
@@ -63,92 +44,46 @@ const routes = [
                 meta: {
                     title: '我的信息',
                     requireAuth: true,
-                    roles: ['student','admin','teacher']
+                    roles: ['student', 'admin']
                 },
                 component: () => import ( /* webpackChunkName: "form" */ "../views/User.vue")
+            }, {
+                path: "/teacherInfo",
+                name: "teacherInfo",
+                meta: {
+                    title: '我的信息',
+                    requireAuth: true,
+                    roles: ['admin', 'teacher']
+                },
+                component: () => import ( /* webpackChunkName: "form" */ "../views/teacherInfo.vue")
+            },{
+                path: "/adminUser",
+                name: "adminUser",
+                meta: {
+                    title: '管理用户',
+                    requireAuth: true,
+                    roles: ['admin']
+                },
+                component: () => import ( /* webpackChunkName: "form" */ "../views/adminUser.vue")
+            },{
+                path: "/adminN",
+                name: "adminN",
+                meta: {
+                    title: '管理通知',
+                    requireAuth: true,
+                    roles: ['admin']
+                },
+                component: () => import ( /* webpackChunkName: "form" */ "../views/adminN.vue")
+            },{
+                path: "/adminSystem",
+                name: "adminNotice",
+                meta: {
+                    title: '选导师系统管理',
+                    requireAuth: true,
+                    roles: ['admin']
+                },
+                component: () => import ( /* webpackChunkName: "form" */ "../views/adminSystem.vue")
             },
-            {
-                path: "/donate",
-                name: "donate",
-                meta: {
-                    title: '鼓励作者',
-                    requireAuth: true,
-                    roles: ['student','admin','teacher']
-                },
-                component: () => import ( /* webpackChunkName: "donate" */ "../views/Donate.vue")
-            }, {
-                path: "/permission",
-                name: "permission",
-                meta: {
-                    title: '权限管理',
-                    requireAuth: true,
-                    roles: ['student','admin','teacher']
-                },
-                component: () => import ( /* webpackChunkName: "permission" */ "../views/Permission.vue")
-            }, {
-                path: "/i18n",
-                name: "i18n",
-                meta: {
-                    title: '国际化语言',
-                    requireAuth: true,
-                    roles: ['student','admin','teacher']
-                },
-                component: () => import ( /* webpackChunkName: "i18n" */ "../views/I18n.vue")
-            }, {
-                path: "/upload",
-                name: "upload",
-                meta: {
-                    title: '上传插件',
-                    requireAuth: true,
-                    roles: ['student','admin','teacher']
-                },
-                component: () => import ( /* webpackChunkName: "upload" */ "../views/Upload.vue")
-            }, {
-                path: "/icon",
-                name: "icon",
-                meta: {
-                    title: '自定义图标',
-                    requireAuth: true,
-                    roles: ['student','admin','teacher']
-                },
-                component: () => import ( /* webpackChunkName: "icon" */ "../views/Icon.vue")
-            }, {
-                path: '/404',
-                name: '404',
-                meta: {
-                    title: '找不到页面',
-                    requireAuth: true,
-                    roles: ['student','admin','teacher']
-                },
-                component: () => import (/* webpackChunkName: "404" */ '../views/404.vue')
-            }, {
-                path: '/403',
-                name: '403',
-                meta: {
-                    title: '没有权限',
-                    requireAuth: true,
-                    roles: ['student','admin','teacher']
-                },
-                component: () => import (/* webpackChunkName: "403" */ '../views/403.vue')
-            }, {
-                path: '/user',
-                name: 'user',
-                meta: {
-                    title: '个人中心',
-                    requireAuth: true,
-                    roles: ['student','admin','teacher']
-                },
-                component: () => import (/* webpackChunkName: "user" */ '../views/User.vue')
-            }, {
-                path: '/editor',
-                name: 'editor',
-                meta: {
-                    title: '富文本编辑器',
-                    requireAuth: true,
-                    roles: ['student','admin','teacher']
-                },
-                component: () => import (/* webpackChunkName: "editor" */ '../views/Editor.vue')
-            }
         ]
     }, {
         path: "/login",
@@ -170,7 +105,6 @@ const router = createRouter({
 /*权限管理：学生权限，老师权限，管理员权限*/
 router.beforeEach((to, from, next) => {
     document.title = `${to.meta.title} | SSM架构课设`;
-    console.log(routes);
     const role = localStorage.getItem('my_role');
     /*是否已经登录，且跳转来自登录界面*/
     if (!role && to.path !== '/login') {
