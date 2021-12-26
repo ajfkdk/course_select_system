@@ -9,14 +9,20 @@
             </div>
           </template>
           <div class="info">
-            <div class="info-image" @click="showDialog">
-              <img :src="avatarImg"/>
-              <span class="info-edit">
-                                <i class="el-icon-lx-camerafill"></i>
-                            </span>
+
+
+            <div class="block" >
+              <el-timeline>
+                <el-timeline-item
+                    v-for="(item,index) in activities"
+                    :key="index"
+                     :timestamp="item.timestamp" placement="top">
+                  <el-card class="box-card">  {{ item.title }}</el-card>
+
+                </el-timeline-item>
+              </el-timeline>
             </div>
-            <div class="info-name">{{ name }}</div>
-            <div class="info-desc">{{ form.desc }}</div>
+
 
           </div>
         </el-card>
@@ -28,36 +34,77 @@
               <span>账户编辑</span>
             </div>
           </template>
-          <el-form label-width="90px" center>
-            <el-form-item label="用户名："> {{ name }}</el-form-item>
-            <el-form-item label="学号：">{{ form.studentNum }}</el-form-item>
-            <el-form-item label="班级：">{{ form.classId }}</el-form-item>
-            <el-form-item label="专业：">{{ form.major }}</el-form-item>
-            <el-form-item label="个人简介：">{{ form.desc }}</el-form-item>
+          <el-form label-width="100px" label-position="left">
+            <el-form-item label="学生数为：">
+              {{StudentNumber}}
+            </el-form-item>
+            <el-form-item label="当前时间段：">
+              {{when}} 阶段
+            </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="showDialog2">修改信息</el-button>
+              <el-button type="primary" class="el-icon-lx-global "  @click="showDialog2">初始化系统</el-button>
+              <el-button type="danger" class="el-icon-lx-remind "  @click="deadline">提前截止   {{when}}阶段</el-button>
             </el-form-item>
           </el-form>
         </el-card>
       </el-col>
     </el-row>
 
-    <el-dialog center v-model="dialogVisible2" title="修改信息">
+    <el-dialog width="50%" center v-model="dialogVisible2" title="初始化系统">
 
-      <el-form label-width="90px" center>
-        <el-form-item label="用户名："> {{ name }}</el-form-item>
-        <el-form-item label="学号：">
-          <el-input v-model="form.studentNum"></el-input>
+      <el-form label-position="left" label-width="200px" >
+        <el-form-item label="学生数为：">
+          <el-input v-model="form.number"></el-input>
         </el-form-item>
-        <el-form-item label="班级：">
-          <el-input v-model="form.classId"></el-input>
+        <el-form-item label="学生选老师的截止时间为：">
+          <el-date-picker
+              v-model="form.date0"
+              type="date"
+             placeholder="Pick a date"
+              format="YYYY-MM-DD"
+              value-format="YYYY-MM-DD"
+              style="width: 100%"
+          ></el-date-picker>
         </el-form-item>
-        <el-form-item label="专业：">
-          <el-input v-model="form.major"></el-input>
+        <el-form-item label="老师选V1学生的截止时间为：">
+          <el-date-picker
+              v-model="form.date1"
+              type="date"
+              style="width: 100%"
+             placeholder="Pick a date"
+              format="YYYY-MM-DD"
+              value-format="YYYY-MM-DD"
+          ></el-date-picker>
         </el-form-item>
-
-        <el-form-item label="个人简介：">
-          <el-input v-model="form.desc"></el-input>
+        <el-form-item label="老师选V2学生的截止时间为：">
+          <el-date-picker
+              v-model="form.date2"
+              type="date"
+             placeholder="Pick a date"
+              format="YYYY-MM-DD"
+              value-format="YYYY-MM-DD"
+              style="width: 100%"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="老师选V3学生的截止时间为：">
+          <el-date-picker
+              v-model="form.date3"
+              type="date"
+             placeholder="Pick a date"
+              format="YYYY-MM-DD"
+              value-format="YYYY-MM-DD"
+              style="width: 100%"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="差额补录时间：">
+          <el-date-picker
+              v-model="form.date4"
+              type="date"
+             placeholder="Pick a date"
+              format="YYYY-MM-DD"
+              value-format="YYYY-MM-DD"
+              style="width: 100%"
+          ></el-date-picker>
         </el-form-item>
 
       </el-form>
@@ -65,34 +112,21 @@
       <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible2 = false">取消</el-button>
-        <el-button type="primary" @click="dialogVisible2 = false">保存</el-button>
+        <el-button type="primary" @click="sendData">保存</el-button>
       </span>
       </template>
     </el-dialog>
 
 
-    <el-dialog title="裁剪图片" v-model="dialogVisible" width="600px">
-      <vue-cropper ref="cropper" :src="imgSrc" :ready="cropImage" :zoom="cropImage" :cropmove="cropImage"
-                   style="width: 100%; height: 400px"></vue-cropper>
-
-      <template #footer>
-                <span class="dialog-footer">
-                    <el-button class="crop-demo-btn" type="primary">选择图片
-                        <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage"/>
-                    </el-button>
-                    <el-button type="primary" @click="saveAvatar">上传并保存</el-button>
-                </span>
-      </template>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import {onMounted, reactive, ref} from "vue";
+import {reactive, ref} from "vue";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
-import avatar from "../assets/img/img.jpg";
-import {fetchUserData} from "../api/index";
+import {deadLine,getWhen, getSystemConfig, initialSystem} from "../api/index";
+import {ElMessage} from "element-plus";
 
 export default {
   name: "user",
@@ -100,87 +134,87 @@ export default {
     VueCropper,
   },
   setup() {
-    const name = localStorage.getItem("ms_username");
-    const role = localStorage.getItem("my_role");
-    const fetchData = (name) => {
-      console.log("student");
-      if (role != "student") return;
-      fetchUserData(name, "student").then((res) => {
-        form.classId = res.data.classId;
-        form.major = res.data.major;
-        form.studentNum = res.data.studentNumber;
-        form.teacherId = res.data.teacherId;
-        avatarImg.value = res.data.portraitUrl;
-        console.log("uer",res)
+    let activities=reactive([
+      {
+        title: '学生选导师',
+        timestamp: '2018-04-15',
+      },
+      {
+        title: '导师选V1列的学生',
+        timestamp: '2018-04-15',
+      },
+      {
+        title: '导师选V2列的学生',
+        timestamp: '2018-04-15',
+      },
+      {
+        title: '导师选V3列的学生',
+        timestamp: '2018-09-15',
+      },
+      {
+        title: '差额补选',
 
+        timestamp: '2018-09-15',
+      }
+    ])
+    let StudentNumber = ref();
+    const fetchData = () => {
+      getSystemConfig().then((res) => {
+        const data=res.data;
+        activities[0].timestamp=data.date0;
+        activities[1].timestamp=data.date1;
+        activities[2].timestamp=data.date2;
+        activities[3].timestamp=data.date3;
+        activities[4].timestamp=data.date4;
+        StudentNumber.value=data.teacherStudentsNumber;
       })
+
+      getWhen().then((res) =>{
+        when.value=activities[res.msg].title
+        time.value=res.msg;
+      })
+
     }
-
     const form = reactive({
-      studentNum: "15615645646",
-      classId: "1" + "班",
-      major: "软件工程",
-      desc: "不可能！我的代码怎么可能会有bug！",
-      /*导师的编号*/
-      teacherId: ""
+      number: "",
+      date0: "",
+      date1: "",
+      date2: "",
+      date3: "",
+      date4: ""
     });
-    const onSubmit = () => {
-    };
-
-    const avatarImg = ref(avatar);
-    const imgSrc = ref("");
-    const cropImg = ref("");
-    const dialogVisible = ref(false);
-    const cropper = ref(null);
-    const dialogVisible2 = ref(false);
-    const showDialog = () => {
-      dialogVisible.value = true;
-      imgSrc.value = avatarImg.value;
-    };
+    let dialogVisible2 = ref(false);
     const showDialog2 = () => {
       dialogVisible2.value = true;
     };
+    const sendData=()=>{
+      initialSystem(form).then(res=>{
+        if (res.code === "200") {
+          dialogVisible2.value=false;
+          fetchData();
+        }
+      })
 
-    const setImage = (e) => {
-      const file = e.target.files[0];
-      if (!file.type.includes("image/")) {
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        dialogVisible.value = true;
-        imgSrc.value = event.target.result;
-        cropper.value && cropper.value.replace(event.target.result);
-      };
-      reader.readAsDataURL(file);
-    };
-
-    const cropImage = () => {
-      cropImg.value = cropper.value.getCroppedCanvas().toDataURL();
-    };
-
-    const saveAvatar = () => {
-      avatarImg.value = cropImg.value;
-      dialogVisible.value = false;
-    };
-    fetchData(name);
+    }
+    const when = ref();
+    const time = ref();
+    const deadline=()=>{
+      deadLine(time.value).then(res=>{
+        ElMessage.success(res.msg)
+        fetchData()
+      })
+    }
+    fetchData();
     return {
-      name,
       form,
-      onSubmit,
-      cropper,
-      avatarImg,
-      imgSrc,
-      cropImg,
-      showDialog,
-      showDialog2,
-      dialogVisible,
+      activities,
       dialogVisible2,
-      setImage,
-
-      cropImage,
-      saveAvatar,
+      StudentNumber,
+      when,
+      showDialog2,
       fetchData,
+      deadline,
+      sendData,
     };
   },
 };

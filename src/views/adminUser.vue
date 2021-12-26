@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i> 基础表格
+          <i class="el-icon-lx-cascades"></i> 管理用户
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -30,13 +30,14 @@
     </div>
 
     <!-- 编辑弹出框 -->
-    <el-dialog title="编辑" v-model="editVisible" width="30%">
-      <el-form label-width="70px">
-        <el-form-item label="用户名">
-          <el-input v-model="form.name"></el-input>
+    <el-dialog title="编辑" v-model="editVisible" width="40%">
+      <el-form label-width="90px">
+        <el-form-item label="用户名："> {{ form.account }}</el-form-item>
+        <el-form-item label="专业">
+          <el-input v-model="form.major"></el-input>
         </el-form-item>
-        <el-form-item label="地址">
-          <el-input v-model="form.address"></el-input>
+        <el-form-item label="个性签名">
+          <el-input v-model="form.mydesc"></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -52,16 +53,13 @@
 <script>
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { fetchData,getAllUserInfo } from "../api/index";
+import { updateUser,deleteUser,getAllUserInfo } from "../api/index";
 
 export default {
   name: "basetable",
   setup() {
     const query = reactive({
-      address: "",
-      name: "",
-      pageIndex: 1,
-      pageSize: 10,
+
     });
     const tableData = ref([
       {
@@ -81,7 +79,6 @@ export default {
       });
     };
     getData();
-
     // 查询操作
     const handleSearch = () => {
       query.pageIndex = 1;
@@ -92,25 +89,34 @@ export default {
       query.pageIndex = val;
       getData();
     };
-
     // 删除操作
-    const handleDelete = (index) => {
+    const handleDelete = (index,row) => {
       // 二次确认删除
       ElMessageBox.confirm("确定要删除吗？", "提示", {
         type: "warning",
       })
           .then(() => {
-            ElMessage.success("删除成功");
-            tableData.value.splice(index, 1);
+            const name = row.account.substring(9);
+            const role = row.account.substring(0,7);
+            deleteUser(name,role).then((res) => {
+              console.log(res);
+              if (res.code == 200&&res.msg=="success") {
+                ElMessage.success("删除成功");
+                tableData.value.splice(index, 1);
+              }else{
+                ElMessage.error("删除失败");
+              }
+            });
+
           })
           .catch(() => {});
     };
-
     // 表格编辑时弹窗和保存
     const editVisible = ref(false);
     let form = reactive({
-      name: "",
-      address: "",
+      account: "",
+      major: "",
+      mydesc: "",
     });
     let idx = -1;
     const handleEdit = (index, row) => {
@@ -122,10 +128,19 @@ export default {
     };
     const saveEdit = () => {
       editVisible.value = false;
-      ElMessage.success(`修改第 ${idx + 1} 行成功`);
-      Object.keys(form).forEach((item) => {
-        tableData.value[idx][item] = form[item];
+      const name = form.account.substring(9);
+      const role = form.account.substring(0,7);
+      form.account=name;
+      updateUser(form,role).then((res) => {
+        console.log(res);
+        if (res.code === "200") {
+          ElMessage.success(res.msg);
+          getData();
+        }else{
+          ElMessage.error("更新失败");
+        }
       });
+
     };
 
     return {

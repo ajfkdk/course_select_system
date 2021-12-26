@@ -10,7 +10,7 @@
           </template>
           <div class="info">
             <div class="info-image" @click="showDialog">
-              <img :src="avatarImg"/>
+              <img :src="form.portraitUrl"/>
               <span class="info-edit">
                                 <i class="el-icon-lx-camerafill"></i>
                             </span>
@@ -32,7 +32,7 @@
             <el-form-item label="用户名："> {{ name }}</el-form-item>
             <el-form-item label="教师编号：">{{ form.teacherNumber }}</el-form-item>
             <el-form-item label="专业：">{{ form.major }}</el-form-item>
-            <el-form-item label="个人简介：">{{form.desc}}</el-form-item>
+            <el-form-item label="个人简介：">{{ form.desc }}</el-form-item>
             <el-form-item>
               <el-button type="primary" @click="showDialog2">修改信息</el-button>
             </el-form-item>
@@ -53,7 +53,7 @@
         </el-form-item>
 
         <el-form-item label="个人简介：">
-          <el-input v-model="form.desc"></el-input>
+          <el-input v-model="form.mydesc"></el-input>
         </el-form-item>
 
       </el-form>
@@ -65,9 +65,6 @@
       </span>
       </template>
     </el-dialog>
-
-
-
 
 
     <el-dialog title="裁剪图片" v-model="dialogVisible" width="600px">
@@ -92,6 +89,7 @@ import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 import avatar from "../assets/img/img.jpg";
 import {fetchUserData} from "../api/index";
+
 export default {
   name: "user",
   components: {
@@ -99,22 +97,19 @@ export default {
   },
   setup() {
     const name = localStorage.getItem("ms_username");
-    const role=localStorage.getItem("my_role");
+    const role = localStorage.getItem("my_role");
     const fetchData = (name) => {
-      if (role!="teacher") return;
-      fetchUserData(name,role).then((res)=>{
-        console.log(res.code == 200, res.msg == "请求成功");
-
-          form.teacherNumber=res.data.teacherNumber;
-          form.major=res.data.major;
-          form.desc=res.data.mydesc;
+      if (role != "teacher") return;
+      fetchUserData(name, role).then((res) => {
+        form.value = res.data
       })
     }
 
-    const form = reactive({
+    const form = ref({
       teacherNumber: "00000000000000000000000",
       major: "软件工程",
-      desc: "不可能！我的代码怎么可能会有bug！",
+      mydesc: "不可能！我的代码怎么可能会有bug！",
+
     });
     const onSubmit = () => {
     };
@@ -159,19 +154,19 @@ export default {
     return {
       name,
       form,
-      onSubmit,
       cropper,
       avatarImg,
       imgSrc,
       cropImg,
+      onSubmit,
       showDialog,
       showDialog2,
+      cropImage,
+      setImage,
+      saveAvatar,
       dialogVisible,
       dialogVisible2,
-      setImage,
 
-      cropImage,
-      saveAvatar,
     };
   },
 };

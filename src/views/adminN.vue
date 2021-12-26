@@ -3,27 +3,43 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i> 基础表格
+          <i class="el-icon-lx-cascades"></i> 管理通知
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
+
     <div class="container">
+
+      <div style="margin-bottom:20px">
+        <el-select v-model="value1" style="width:40%" multiple placeholder="学生" class="mr10" >
+          <el-option
+              v-for="item in options"
+              :key="item.account"
+              :label="item.account"
+              :value="item.account"
+          >
+          </el-option>
+        </el-select>
+
+        <el-input v-model="NoticeData.content" style="width:30%" placeholder="通知内容" class=" mr10"></el-input>
+        <el-button type="primary" icon="el-icon-notice" style="width:10%" @click="handleSearch">发送通知</el-button>
+      </div>
+
+
       <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
-        <el-table-column prop="name" label="id"></el-table-column>
-        <el-table-column prop="name" label="内容"></el-table-column>
+        <el-table-column prop="id" width="160" label="id"></el-table-column>
+        <el-table-column prop="content" width="500"  label="内容"></el-table-column>
+        <el-table-column prop="receive" width="200"  label="接收者"></el-table-column>
+        <el-table-column prop="notificationTime" label="通知时间"></el-table-column>
         <el-table-column label="操作" width="180" align="center">
           <template #default="scope">
-            <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑
-            </el-button>
+
             <el-button type="text" icon="el-icon-delete" class="red"
                        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <div class="pagination">
-        <el-pagination background layout="total, prev, pager, next" :current-page="query.pageIndex"
-                       :page-size="query.pageSize" :total="pageTotal" @current-change="handlePageChange"></el-pagination>
-      </div>
+
     </div>
 
     <!-- 编辑弹出框 -->
@@ -49,52 +65,66 @@
 <script>
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { fetchData } from "../api/index";
+import {deleteNoticeById,addNotice, getAllNoticeInfo, getAllUserInfo} from "../api/index";
 
 export default {
   name: "basetable",
-  setup() {
-    const query = reactive({
-      address: "",
-      name: "",
-      pageIndex: 1,
-      pageSize: 10,
+  setup: function () {
+    const NoticeData = reactive({
+      content: ""
     });
-    const tableData = ref([
-
-    ]);
+    const tableData = ref([]);
     const pageTotal = ref(0);
     // 获取表格数据
     const getData = () => {
-      fetchData(query).then((res) => {
-        tableData.value = res.list;
-        pageTotal.value = res.pageTotal || 50;
+      getAllNoticeInfo().then((res) => {
+        tableData.value = res.data;
+      });
+      getAllUserInfo().then((res) => {
+        options.value = res.data;
+        // options.value.push({account: "admin"})
       });
     };
     getData();
 
-    // 查询操作
+    // 发送通知
     const handleSearch = () => {
-      query.pageIndex = 1;
-      getData();
+      let vm=[]
+      value1.value.forEach(item=>{
+        vm.push(item.substring(9));
+      })
+      let jsonName=JSON.stringify(vm);
+      jsonName=jsonName.substring(1);
+      jsonName = jsonName.substring(jsonName.length - 1, -1);
+      console.log(jsonName);
+      addNotice(NoticeData.content,jsonName).then((res) => {
+        ElMessage.success(res.msg);
+        getData();
+      });
+
     };
     // 分页导航
     const handlePageChange = (val) => {
-      query.pageIndex = val;
+      NoticeData.pageIndex = val;
       getData();
     };
 
     // 删除操作
-    const handleDelete = (index) => {
+    const handleDelete = (index,row) => {
       // 二次确认删除
       ElMessageBox.confirm("确定要删除吗？", "提示", {
         type: "warning",
       })
           .then(() => {
-            ElMessage.success("删除成功");
+            console.log(row.id);
+            deleteNoticeById(row.id,row.receive).then((res) => {
+              ElMessage.success(res.msg);
+              getData();
+            });
             tableData.value.splice(index, 1);
           })
-          .catch(() => {});
+          .catch(() => {
+          });
     };
 
     // 表格编辑时弹窗和保存
@@ -118,18 +148,26 @@ export default {
         tableData.value[idx][item] = form[item];
       });
     };
-
+    let options = ref([
+      {
+        account: '请求服务器失败',
+      }
+    ])
+    let value1 = ref([])
     return {
-      query,
+      NoticeData,
       tableData,
       pageTotal,
       editVisible,
       form,
+      options,
+      value1,
       handleSearch,
       handlePageChange,
       handleDelete,
       handleEdit,
       saveEdit,
+
     };
   },
 };
