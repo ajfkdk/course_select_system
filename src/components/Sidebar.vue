@@ -78,6 +78,11 @@ export default {
         index: "/adminSystem",
         title: "选导师系统管理",
       },
+      {
+        icon: "el-icon-lx-searchlist",
+        index: "/TeacherTable",
+        title: "选学生",
+      },
 
 
     ];
@@ -94,18 +99,18 @@ export default {
         },
 
         {
-          icon: "el-icon-lx-cascades",
-          index: "/table",
-          title: "基础表格",
+          icon: "el-icon-lx-searchlist",
+          index: "/TeacherTable",
+          title: "选学生",
         },
-
-
 
         {
           icon: "el-icon-lx-profile",
           index: "/teacherInfo",
           title: "我的信息(teacher)",
         },
+
+
       ],
       student: [
         {

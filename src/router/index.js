@@ -83,6 +83,15 @@ const routes = [
                     roles: ['admin']
                 },
                 component: () => import ( /* webpackChunkName: "form" */ "../views/adminSystem.vue")
+            },{
+                path: "/TeacherTable",
+                name: "TeacherTable",
+                meta: {
+                    title: '选学生',
+                    requireAuth: true,
+                    roles: ['teacher']
+                },
+                component: () => import ( /* webpackChunkName: "form" */ "../views/TeacherTable.vue")
             },
         ]
     }, {

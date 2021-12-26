@@ -137,12 +137,33 @@ export const deadLine=(timeQuantum)=>{
 export const getAllStateStudent=(teacherName)=>{
     return request({
         url: '/select/student',
-        method: 'patch',
+        method: 'get',
         params:{
             teacherName
         }
     });
 }
+//获取剩余学生
+export const getResidueStudent=(teacherName)=>{
+    return request({
+        url: '/select/residue',
+        method: 'get',
+        params:{
+            teacherName
+        }
+    });
+}
+//确定学生
+export const confirmStudent=(teacherName,studentName)=>{
+    return request({
+        url: '/select/student',
+        method: 'post',
+        params:{
+            teacherName,studentName
+        }
+    });
+}
+
 
 
 
