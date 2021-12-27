@@ -13,11 +13,10 @@
               <img :src="avatarImg"/>
               <span class="info-edit">
                                 <i class="el-icon-lx-camerafill"></i>
-                            </span>
+              </span>
             </div>
             <div class="info-name">{{ name }}</div>
             <div class="info-desc">{{ form.desc }}</div>
-
           </div>
         </el-card>
       </el-col>
@@ -28,12 +27,13 @@
               <span>账户编辑</span>
             </div>
           </template>
-          <el-form label-width="90px" center>
+          <el-form label-width="100px" center>
             <el-form-item label="用户名："> {{ name }}</el-form-item>
-            <el-form-item label="学号：">{{ form.studentNum }}</el-form-item>
+            <el-form-item label="学号：">{{ form.studentNumber }}</el-form-item>
             <el-form-item label="班级：">{{ form.classId }}</el-form-item>
+            <el-form-item label="导师的姓名：">{{form.teacherAccount}}</el-form-item>
             <el-form-item label="专业：">{{ form.major }}</el-form-item>
-            <el-form-item label="个人简介：">{{ form.desc }}</el-form-item>
+            <el-form-item label="个人简介：">{{ form.mydesc }}</el-form-item>
             <el-form-item>
               <el-button type="primary" @click="showDialog2">修改信息</el-button>
             </el-form-item>
@@ -47,7 +47,7 @@
       <el-form label-width="90px" center>
         <el-form-item label="用户名："> {{ name }}</el-form-item>
         <el-form-item label="学号：">
-          <el-input v-model="form.studentNum"></el-input>
+          <el-input v-model="form.studentNumber"></el-input>
         </el-form-item>
         <el-form-item label="班级：">
           <el-input v-model="form.classId"></el-input>
@@ -57,7 +57,7 @@
         </el-form-item>
 
         <el-form-item label="个人简介：">
-          <el-input v-model="form.desc"></el-input>
+          <el-input v-model="form.mydesc"></el-input>
         </el-form-item>
 
       </el-form>
@@ -65,7 +65,7 @@
       <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible2 = false">取消</el-button>
-        <el-button type="primary" @click="dialogVisible2 = false">保存</el-button>
+        <el-button type="primary" @click="onSubmit">保存</el-button>
       </span>
       </template>
     </el-dialog>
@@ -92,7 +92,8 @@ import {onMounted, reactive, ref} from "vue";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 import avatar from "../assets/img/img.jpg";
-import {fetchUserData} from "../api/index";
+import {updateUser, fetchUserData} from "../api/index";
+import {ElMessage} from "element-plus";
 
 export default {
   name: "user",
@@ -103,28 +104,31 @@ export default {
     const name = localStorage.getItem("ms_username");
     const role = localStorage.getItem("my_role");
     const fetchData = (name) => {
-      console.log("student");
       if (role != "student") return;
       fetchUserData(name, "student").then((res) => {
-        form.classId = res.data.classId;
-        form.major = res.data.major;
-        form.studentNum = res.data.studentNumber;
-        form.teacherId = res.data.teacherId;
-        avatarImg.value = res.data.portraitUrl;
-        console.log("uer",res)
-
+        form.value = res.data;
+        avatarImg.value=res.data.portraitUrl
       })
     }
 
-    const form = reactive({
+    const form = ref({
       studentNum: "15615645646",
       classId: "1" + "班",
       major: "软件工程",
-      desc: "不可能！我的代码怎么可能会有bug！",
+      mydesc: "不可能！我的代码怎么可能会有bug！",
       /*导师的编号*/
-      teacherId: ""
+      teacherAccount: ""
     });
     const onSubmit = () => {
+      updateUser(form.value, "student").then(res => {
+        if (res.code === "200") {
+          ElMessage.success(res.msg)
+          dialogVisible2.value = false;
+          fetchData(name);
+        } else {
+          ElMessage.warning(res.msg)
+        }
+      })
     };
 
     const avatarImg = ref(avatar);

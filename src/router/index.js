@@ -116,6 +116,7 @@ router.beforeEach((to, from, next) => {
     document.title = `${to.meta.title} | SSM架构课设`;
     const role = localStorage.getItem('my_role');
     /*是否已经登录，且跳转来自登录界面*/
+    // if (!role && from.path !== '/login') {
     if (!role && to.path !== '/login') {
         next('/login');
     } else if (to.meta.requireAuth) {
@@ -131,8 +132,6 @@ router.beforeEach((to, from, next) => {
                 }
             }
         }
-
-
     } else {
         next();
     }

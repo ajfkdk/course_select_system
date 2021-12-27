@@ -25,14 +25,14 @@
         <el-card shadow="hover">
           <template #header>
             <div class="clearfix">
-              <span>账户编辑</span>
+              <span>账户编辑fff</span>
             </div>
           </template>
           <el-form label-width="90px" center>
             <el-form-item label="用户名："> {{ name }}</el-form-item>
             <el-form-item label="教师编号：">{{ form.teacherNumber }}</el-form-item>
             <el-form-item label="专业：">{{ form.major }}</el-form-item>
-            <el-form-item label="个人简介：">{{ form.desc }}</el-form-item>
+            <el-form-item label="个人简介：">{{ form.mydesc }}</el-form-item>
             <el-form-item>
               <el-button type="primary" @click="showDialog2">修改信息</el-button>
             </el-form-item>
@@ -51,7 +51,6 @@
         <el-form-item label="专业：">
           <el-input v-model="form.major"></el-input>
         </el-form-item>
-
         <el-form-item label="个人简介：">
           <el-input v-model="form.mydesc"></el-input>
         </el-form-item>
@@ -61,7 +60,7 @@
       <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible2 = false">取消</el-button>
-        <el-button type="primary" @click="dialogVisible2 = false">保存</el-button>
+        <el-button type="primary" @click="onSubmit">保存</el-button>
       </span>
       </template>
     </el-dialog>
@@ -88,7 +87,8 @@ import {onMounted, reactive, ref} from "vue";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 import avatar from "../assets/img/img.jpg";
-import {fetchUserData} from "../api/index";
+import {updateUser,fetchUserData} from "../api/index";
+import {ElMessage} from "element-plus";
 
 export default {
   name: "user",
@@ -102,16 +102,26 @@ export default {
       if (role != "teacher") return;
       fetchUserData(name, role).then((res) => {
         form.value = res.data
+        avatarImg.value = res.portraitUrl
       })
     }
 
     const form = ref({
       teacherNumber: "00000000000000000000000",
-      major: "软件工程",
+      major: "软件工55程",
       mydesc: "不可能！我的代码怎么可能会有bug！",
-
     });
     const onSubmit = () => {
+      // console.log(form.value,"teacher")
+      updateUser(form.value,"teacher").then(res=>{
+        if(res.code==="200"){
+          ElMessage.success(res.msg)
+          dialogVisible2.value = false;
+          fetchData(name);
+        }else{
+          ElMessage.warning(res.msg)
+        }
+      })
     };
 
     const avatarImg = ref(avatar);

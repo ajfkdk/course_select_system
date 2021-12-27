@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
+    "test": "vite --port 80",
     "build": "vite build",
     "serve": "vite preview"
   },

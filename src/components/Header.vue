@@ -19,7 +19,7 @@
                 </div>
                 <!-- 用户头像 -->
                 <div class="user-avator">
-                    <img src="../assets/img/img.jpg" />
+                    <img :src="portraitUrl"/>
                 </div>
                 <!-- 用户名下拉菜单 -->
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">
@@ -49,7 +49,7 @@ export default {
     setup() {
         const username = localStorage.getItem("ms_username");
         const message = 2;
-
+        let portraitUrl=localStorage.getItem("image_url")
         const store = useStore();
         const collapse = computed(() => store.state.collapse);
         // 侧边栏折叠
@@ -76,6 +76,7 @@ export default {
 
         return {
             username,
+          portraitUrl,
             message,
             collapse,
             collapseChage,
@@ -145,6 +146,7 @@ export default {
 }
 .user-avator {
     margin-left: 20px;
+  margin-right: 20px;
 }
 .user-avator img {
     display: block;

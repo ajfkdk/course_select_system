@@ -1,5 +1,4 @@
 import request from '../utils/request';
-
 //获取老师数据
 export const fetchData = query => {
     return request({
@@ -8,7 +7,6 @@ export const fetchData = query => {
         params: query
     });
 };
-
 //登录请求
 export const toLogin = query => {
     return request({
@@ -17,15 +15,13 @@ export const toLogin = query => {
         params: query
     });
 }
-
 //获取通知
 export const fetchNotice = query => {
     return request({
-        url: './notice/'+query,
+        url: './notice/' + query,
         method: 'get',
     });
 }
-
 //获取用户信息
 export const fetchUserData = (query, role) => {
     return request({
@@ -33,7 +29,6 @@ export const fetchUserData = (query, role) => {
         method: 'get'
     });
 }
-
 //发送确定导师的数据
 export const sendChooseTeacherData = (query) => {
     return request({
@@ -42,124 +37,134 @@ export const sendChooseTeacherData = (query) => {
         params: query
     });
 }
-
 //管理员获取全部用户信息
-export const getAllUserInfo=()=>{
+export const getAllUserInfo = () => {
     return request({
         url: '/student/all',
         method: 'get'
     });
 }
-
 //删除用户
-export const deleteUser=(query,role)=>{
+export const deleteUser = (query, role) => {
     return request({
-        url: '/'+role+'?'+role+"Name="+query,
+        url: '/' + role + '?' + role + "Name=" + query,
         method: 'delete',
     });
 }
-
 //更新用户信息
-export const updateUser=(query,role)=>{
+export const updateUser = (query, role) => {
     return request({
-        url: '/'+role+'/',
+        url: '/' + role + '/',
         method: 'patch',
-        params : query
+        params: query
     });
 }
-
-
 //管理员获取全部通知信息
-export const getAllNoticeInfo=()=>{
+export const getAllNoticeInfo = () => {
     return request({
         url: '/notice',
         method: 'get'
     });
 }
-
 //添加一个通知功能
-export const addNotice=(content,jsonName)=>{
+export const addNotice = (content, jsonName) => {
     return request({
         url: '/notice',
         method: 'POST',
         params: {
-            content:content,
-            nameJson:jsonName
+            content: content,
+            nameJson: jsonName
         }
     });
 }
-
 //删除通知
-export const deleteNoticeById=(id,name)=>{
+export const deleteNoticeById = (id, name) => {
     return request({
         url: '/notice',
         method: 'delete',
-        params:{
+        params: {
             id,
             name
         }
     });
 }
-
 //获取系统参数
-export const getSystemConfig=(id,name)=>{
+export const getSystemConfig = (id, name) => {
     return request({
         url: '/system',
         method: 'get',
     });
 }
 //初始化系统
-export const initialSystem=(form)=>{
+export const initialSystem = (form) => {
     return request({
         url: '/system',
         method: 'post',
-        params:form
+        params: form
     });
 }
-//初始化系统
-export const getWhen=()=>{
+//获取当前时间段
+export const getWhen = () => {
     return request({
         url: '/system/when',
         method: 'get',
     });
 }
 //提前截止时间段
-export const deadLine=(timeQuantum)=>{
+export const deadLine = (timeQuantum) => {
     return request({
         url: '/system',
         method: 'patch',
-        params:{
+        params: {
             timeQuantum
         }
     });
 }
 //获取全部的学生
-export const getAllStateStudent=(teacherName)=>{
+export const getAllStateStudent = (teacherName) => {
     return request({
         url: '/select/student',
         method: 'get',
-        params:{
+        params: {
             teacherName
         }
     });
 }
 //获取剩余学生
-export const getResidueStudent=(teacherName)=>{
+export const getResidueStudent = (teacherName) => {
     return request({
         url: '/select/residue',
         method: 'get',
-        params:{
+        params: {
             teacherName
         }
     });
 }
 //确定学生
-export const confirmStudent=(teacherName,studentName)=>{
+export const confirmStudent = (teacherName, studentName) => {
     return request({
         url: '/select/student',
         method: 'post',
-        params:{
-            teacherName,studentName
+        params: {
+            teacherName, studentName
+        }
+    });
+}
+//注册
+export const registerUser = (query) => {
+    return request({
+        url: '/register',
+        method: 'post',
+        params: query
+    });
+}
+//获取用户头像url
+export const getUserPortrait = (name) => {
+    return request({
+        url: '/portrait',
+        method: 'get',
+        params: {
+            account: name
         }
     });
 }

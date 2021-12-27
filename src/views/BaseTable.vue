@@ -54,11 +54,12 @@
 <script>
 import {ref, reactive} from "vue";
 import {ElMessage, ElMessageBox} from "element-plus";
-import {fetchData, sendChooseTeacherData} from "../api/index";
-
+import {getWhen,fetchData, sendChooseTeacherData} from "../api/index";
+import {useRouter} from "vue-router";
 export default {
   name: "basetable",
   setup() {
+    const router = useRouter();
     const name = localStorage.getItem("ms_username")
     let ops = reactive([
       {
@@ -91,9 +92,9 @@ export default {
     ])
     //处理选择栏
     const handleSelect = (val, account) => {
-      if (val == "取消选择") {
+      if (val === "取消选择") {
         tableData.value.forEach(item => {
-          if (item.grade == "取消选择") {
+          if (item.grade === "取消选择") {
             item.grade = "";
           }
         })
@@ -113,7 +114,6 @@ export default {
 
       //val 找到对应的 元素
       //找到元素后把account的值给 元素.name
-
       listData.forEach(item => {
         if (item.value == val) {
           item.name = account;
@@ -131,29 +131,36 @@ export default {
 
 
     };
-
-
     let query = reactive({});
     let tableData = ref([
       {
         grade: "",
-        account: "i'm botrom",
-        major: "发考试的放假啦",
-        teacherNumber: 7889,
-        mydesc: "一起旅行",
+        account: "",
+        major: "",
+        teacherNumber: 0,
+        mydesc: "",
         portraitUrl: "http://chenjunbin.ren/css--portrait--test.jpg"
       }
     ]);
     const pageTotal = ref(0);
     // 获取表格数据
     const getData = () => {
-      fetchData(query).then((res) => {
-        tableData.value = res.data;
+      let when;
+      getWhen().then(res =>{
+        console.log("当前阶段：", res.msg);
+        when=res.msg;
+      })
+      if (when === '0') {
+        fetchData(query).then((res) => {
+          tableData.value = res.data;
+        });
+      }else{
+        alert("学生选导师阶段已经截止！");
+        router.push("/");
+      }
 
-      });
     };
     getData();
-
     //筛选出数据发送给后台
     const sendData = () => {
       //把姓名加到list中去传给后端
@@ -182,8 +189,6 @@ export default {
         )
       } else ElMessage.error("请检查表单，有一个梯队没有老师");
     }
-
-
     return {
       query,
       ops,
