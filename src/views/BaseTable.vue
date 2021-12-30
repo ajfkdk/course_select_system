@@ -145,19 +145,18 @@ export default {
     const pageTotal = ref(0);
     // 获取表格数据
     const getData = () => {
-      let when;
-      getWhen().then(res =>{
-        console.log("当前阶段：", res.msg);
-        when=res.msg;
+
+
+      getWhen().then(res=>{
+        if (res.msg === "0") {
+          //不等于0代表现在不是选导师的时候
+          fetchData().then(res=>{
+            tableData.value=res.data;
+          })
+        }else{
+          alert("当前不是选导师的时间")
+        }
       })
-      if (when === '0') {
-        fetchData(query).then((res) => {
-          tableData.value = res.data;
-        });
-      }else{
-        alert("学生选导师阶段已经截止！");
-        router.push("/");
-      }
 
     };
     getData();

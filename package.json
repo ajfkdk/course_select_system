@@ -1,6 +1,6 @@
 {
-  "name": "vue-manage-system",
-  "version": "5.1.0",
+  "name": "vue3-vedio-background",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -16,6 +16,7 @@
     "vue-i18n": "^9.0.0",
     "vue-router": "^4.0.10",
     "vue-schart": "^2.0.0",
+    "vue-videobg": "^2.0.0",
     "vuex": "^4.0.2",
     "wangeditor": "^4.7.4"
   },
@@ -28,5 +29,20 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "description": "基于 Vue3 + Element Plus 的后台管理系统解决方案。",
+  "main": "vite.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajfkdk/course_select_system.git"
+  },
+  "keywords": [
+    "qq.32359"
+  ],
+  "author": "chenjunbin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ajfkdk/course_select_system/issues"
+  },
+  "homepage": "https://github.com/ajfkdk/course_select_system#readme"
 }

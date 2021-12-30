@@ -7,3 +7,7 @@ export default {
         include: ['schart.js']
     }
 }
+
+css:{
+
+}

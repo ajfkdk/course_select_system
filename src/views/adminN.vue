@@ -10,20 +10,7 @@
 
     <div class="container">
 
-      <div style="margin-bottom:20px">
-        <el-select v-model="value1" style="width:40%" multiple placeholder="学生" class="mr10" >
-          <el-option
-              v-for="item in options"
-              :key="item.account"
-              :label="item.account"
-              :value="item.account"
-          >
-          </el-option>
-        </el-select>
 
-        <el-input v-model="NoticeData.content" style="width:30%" placeholder="通知内容" class=" mr10"></el-input>
-        <el-button type="primary" icon="el-icon-notice" style="width:10%" @click="handleSearch">发送通知</el-button>
-      </div>
 
 
       <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
@@ -40,6 +27,20 @@
         </el-table-column>
       </el-table>
 
+      <div style="margin:20px"  >
+        <el-select v-model="value1" style="width:40%" multiple placeholder="学生" class="mr10" >
+          <el-option
+              v-for="item in options"
+              :key="item.account"
+              :label="item.account"
+              :value="item.account"
+          >
+          </el-option>
+        </el-select>
+
+        <el-input v-model="NoticeData.content" style="width:30%" placeholder="通知内容" class=" mr10"></el-input>
+        <el-button type="default" icon="el-icon-notice" style="width:10%" @click="handleSearch">发送通知</el-button>
+      </div>
     </div>
 
     <!-- 编辑弹出框 -->

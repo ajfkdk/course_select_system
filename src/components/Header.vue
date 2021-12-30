@@ -5,7 +5,7 @@
             <i v-if="!collapse" class="el-icon-s-fold"></i>
             <i v-else class="el-icon-s-unfold"></i>
         </div>
-        <div class="logo">后台管理系统</div>
+        <div class="logo el-icon-lx-emojifill">师生互选管理系统</div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 消息中心 -->
@@ -29,9 +29,6 @@
                     </span>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
-                                <el-dropdown-item>项目仓库</el-dropdown-item>
-                            </a>
                             <el-dropdown-item command="user">个人中心</el-dropdown-item>
                             <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
                         </el-dropdown-menu>
@@ -68,6 +65,7 @@ export default {
         const handleCommand = (command) => {
             if (command == "loginout") {
                 localStorage.removeItem("ms_username");
+                localStorage.removeItem("my_role");
                 router.push("/login");
             } else if (command == "user") {
                 router.push("/user");

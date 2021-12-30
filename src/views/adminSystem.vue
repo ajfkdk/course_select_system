@@ -5,32 +5,6 @@
         <el-card shadow="hover">
           <template #header>
             <div class="clearfix">
-              <span>基础信息</span>
-            </div>
-          </template>
-          <div class="info">
-
-
-            <div class="block" >
-              <el-timeline>
-                <el-timeline-item
-                    v-for="(item,index) in activities"
-                    :key="index"
-                     :timestamp="item.timestamp" placement="top">
-                  <el-card class="box-card">  {{ item.title }}</el-card>
-
-                </el-timeline-item>
-              </el-timeline>
-            </div>
-
-
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="12">
-        <el-card shadow="hover">
-          <template #header>
-            <div class="clearfix">
               <span>账户编辑</span>
             </div>
           </template>
@@ -42,12 +16,39 @@
               {{when}} 阶段
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" class="el-icon-lx-global "  @click="showDialog2">初始化系统</el-button>
-              <el-button type="danger" class="el-icon-lx-remind "  @click="deadline">提前截止   {{when}}阶段</el-button>
+              <el-button type="default" class="el-icon-lx-global "  @click="showDialog2">初始化系统</el-button>
+              <el-button type="default" class="el-icon-lx-remind "  @click="deadline">提前截止   {{when}}阶段</el-button>
             </el-form-item>
           </el-form>
         </el-card>
       </el-col>
+      <el-col :span="12">
+        <el-card shadow="hover">
+          <template #header>
+            <div class="clearfix">
+              <span>基础信息</span>
+            </div>
+          </template>
+          <div class="info">
+
+
+            <div class="block" >
+              <el-timeline>
+                <el-timeline-item
+                    v-for="(item,index) in activities"
+                    :key="index"
+                    :timestamp="item.timestamp" placement="top">
+                  <el-card class="box-card">  {{ item.title }}</el-card>
+
+                </el-timeline-item>
+              </el-timeline>
+            </div>
+
+
+          </div>
+        </el-card>
+      </el-col>
+
     </el-row>
 
     <el-dialog width="50%" center v-model="dialogVisible2" title="初始化系统">

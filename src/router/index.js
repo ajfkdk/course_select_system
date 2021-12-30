@@ -28,15 +28,6 @@ const routes = [
                     roles: ['student', 'admin', 'teacher']
                 },
                 component: () => import ( /* webpackChunkName: "table" */ "../views/BaseTable.vue")
-            }, {
-                path: "/form",
-                name: "baseform",
-                meta: {
-                    title: '表单',
-                    requireAuth: true,
-                    roles: ['student', 'admin', 'teacher']
-                },
-                component: () => import ( /* webpackChunkName: "form" */ "../views/BaseForm.vue")
             },
             {
                 path: "/user",
@@ -102,6 +93,14 @@ const routes = [
             requireAuth: false,
         },
         component: () => import ( /* webpackChunkName: "login" */ "../views/Login.vue")
+    } ,{
+        path: "/test",
+        name: "test",
+        meta: {
+            title: '测试',
+            requireAuth: false,
+        },
+        component: () => import ( /* webpackChunkName: "login" */ "../views/testBackground.vue")
     }
 ];
 
@@ -113,25 +112,10 @@ const router = createRouter({
 
 /*权限管理：学生权限，老师权限，管理员权限*/
 router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title} | SSM架构课设`;
-    const role = localStorage.getItem('my_role');
-    /*是否已经登录，且跳转来自登录界面*/
-    // if (!role && from.path !== '/login') {
+    document.title = `${to.meta.title} | vue-manage-system`;
+    const role = localStorage.getItem('ms_username');
     if (!role && to.path !== '/login') {
         next('/login');
-    } else if (to.meta.requireAuth) {
-        // 如果页面需要权限控制，进入下面这个代码段
-
-        if (to.meta.roles.length !== 0) {
-            for (let i = 0; i < to.meta.roles.length; i++) {
-                if (role === to.meta.roles[i]) {
-                    next()
-                    break
-                } else if (i === to.meta.roles.length - 1) {
-                    next("/403")
-                }
-            }
-        }
     } else {
         next();
     }

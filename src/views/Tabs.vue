@@ -5,9 +5,10 @@
                 <el-breadcrumb-item><i class="el-icon-lx-copy"></i> tab选项卡</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div class="container">
+        <div class="container   ">
             <el-tabs v-model="message">
-                <el-tab-pane :label="`消息(${state.unread.length})`" name="first">
+                <el-tab-pane :label="`消息(${state.unread.length})`"  name="first">
+
                     <el-table :data="state.unread" :show-header="false" style="width: 100%">
                         <el-table-column>
                             <template #default="scope">

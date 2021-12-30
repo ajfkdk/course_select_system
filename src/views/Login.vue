@@ -1,10 +1,11 @@
 <template>
-  <div class="login-wrap">
+  <test-bac source="../src/assets/video/abc.mp4">
+  <div class="">
 
-    <div class="ms-login">
-      <div class="ms-title">后台管理系统</div>
-      <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
-        <el-form-item prop="username">
+    <div class="   ms-login">
+      <div class="ms-title shake-chunk">师生互选-后台管理系统</div>
+      <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content   ">
+        <el-form-item class="" prop="username">
           <el-input v-model="param.username" placeholder="username">
             <template #prepend>
               <el-button icon="el-icon-user"></el-button>
@@ -19,8 +20,8 @@
             </template>
           </el-input>
         </el-form-item>
-        <div class="login-btn">
-          <el-button type="primary" @click="submitForm()">登录</el-button>
+        <div class="login-btn ">
+          <el-button  type="primary" @click="submitForm()">登录</el-button>
         </div>
         <el-row :gutter="20">
 
@@ -57,6 +58,7 @@
       </span>
     </template>
   </el-dialog>
+  </test-bac>
 </template>
 
 <script>
@@ -65,9 +67,15 @@ import {useStore} from "vuex";
 import {useRouter} from "vue-router";
 import {ElMessage} from "element-plus";
 import {getUserPortrait,registerUser, toLogin} from "../api/index";
+import TestBac from "./testBackground.vue";
+
 
 export default {
+  components: {
+    TestBac,
+  },
   setup() {
+
     const router = useRouter();
     const param = reactive({
       username: "zhangsan",
@@ -150,7 +158,12 @@ export default {
 };
 </script>
 
+
+
 <style scoped>
+@import "https://csshake.surge.sh/csshake.min.css";
+@import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css";
+
 .login-wrap {
   position: relative;
   width: 100%;
@@ -166,6 +179,17 @@ export default {
   font-size: 20px;
   color: #fff;
   border-bottom: 1px solid #ddd;
+}
+.el-button--primary {
+  background: #687a92;
+border-color: #5d6978;
+color: #FFF;
+}
+.login-tips{
+
+      font-size: 15px;
+      line-height: 30px;
+      color: #a390ff;
 }
 
 .ms-login {

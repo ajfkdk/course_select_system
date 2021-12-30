@@ -1,8 +1,9 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :span="12">
-        <el-card shadow="hover">
+      <el-col :span="20">
+
+        <el-card shadow="hover" class="animate__heartBeat ">
           <template #header>
             <div class="clearfix">
               <span>基础信息</span>
@@ -19,11 +20,9 @@
             <div class="info-desc">{{ form.desc }}</div>
           </div>
         </el-card>
-      </el-col>
-      <el-col :span="12">
-        <el-card shadow="hover">
+        <el-card shadow="hover" class="animate__heartBeat">
           <template #header>
-            <div class="clearfix">
+            <div class="clearfix   ">
               <span>账户编辑</span>
             </div>
           </template>
@@ -35,7 +34,7 @@
             <el-form-item label="专业：">{{ form.major }}</el-form-item>
             <el-form-item label="个人简介：">{{ form.mydesc }}</el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="showDialog2">修改信息</el-button>
+              <el-button type="primary" @click="showDialog2" class="box a nimate">修改信息</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -191,6 +190,13 @@ export default {
 </script>
 
 <style scoped>
+/*摇摆css*/
+@import "https://csshake.surge.sh/csshake.min.css";
+
+@import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css";
+
+
+
 .info {
   text-align: center;
   padding: 35px 0;

@@ -4,7 +4,8 @@
         <v-sidebar />
         <div class="content-box" :class="{ 'content-collapse': collapse }">
             <v-tags></v-tags>
-            <div class="content">
+
+          <div class="content">
                 <router-view v-slot="{ Component }">
                     <transition name="move" mode="out-in">
                         <keep-alive :include="tagsList">
@@ -15,6 +16,7 @@
                 <!-- <el-backtop target=".content"></el-backtop> -->
             </div>
         </div>
+
     </div>
 </template>
 <script>
@@ -42,3 +44,4 @@ export default {
     },
 };
 </script>
+
